@@ -276,9 +276,9 @@ class MainWindow(QMainWindow, WindowMixin):
                                              fmtShortcut("Ctrl+Wheel")))
         self.zoomWidget.setEnabled(False)
 
-        zoomIn = action(getStr('zoomin'), partial(self.addZoom, 10),
+        zoomIn = action(getStr('zoomin'), partial(self.addZoom, 1.1),
                         'Ctrl++', 'zoom-in', getStr('zoominDetail'), enabled=False)
-        zoomOut = action(getStr('zoomout'), partial(self.addZoom, -10),
+        zoomOut = action(getStr('zoomout'), partial(self.addZoom, 0.9),
                          'Ctrl+-', 'zoom-out', getStr('zoomoutDetail'), enabled=False)
         zoomOrg = action(getStr('originalsize'), partial(self.setZoom, 100),
                          'Ctrl+=', 'zoom', getStr('originalsizeDetail'), enabled=False)
@@ -916,8 +916,8 @@ class MainWindow(QMainWindow, WindowMixin):
         self.zoomMode = self.MANUAL_ZOOM
         self.zoomWidget.setValue(value)
 
-    def addZoom(self, increment=10):
-        self.setZoom(self.zoomWidget.value() + increment)
+    def addZoom(self, increment=1.1):
+        self.setZoom(self.zoomWidget.value() * increment)
 
     def zoomRequest(self, delta):
         # get the current scrollbar positions
@@ -955,9 +955,12 @@ class MainWindow(QMainWindow, WindowMixin):
         move_y = min(max(move_y, 0), 1)
 
         # zoom in
-        units = delta / (8 * 15)
-        scale = 10
-        self.addZoom(scale * units)
+        # units = delta / (8 * 15)
+        # scale = 10
+        units = 1.1
+        if delta < 0:
+            units = 0.9
+        self.addZoom(units)
 
         # get the difference in scrollbar values
         # this is how far we can move
