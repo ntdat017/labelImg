@@ -12,7 +12,7 @@ class ZoomWidget(QSpinBox):
     def __init__(self, value=100):
         super(ZoomWidget, self).__init__()
         self.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.setRange(1, 500)
+        self.setRange(1, 2000)
         self.setSuffix(' %')
         self.setValue(value)
         self.setToolTip(u'Zoom Level')
